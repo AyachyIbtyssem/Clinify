@@ -1,0 +1,23 @@
+{
+  "name": "clinify",
+  "version": "1.0.0",
+  "description": "**Clinify** is a web and mobile platform designed to digitize and streamline clinic services. It manages patients, doctors, assistants, and consultations while providing patients with notifications for appointments, medication reminders, and personalized health tips.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2"
+  }
+}
