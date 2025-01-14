@@ -1,12 +1,14 @@
 const express = require('express');
 const sequelize = require('./config/database');
 const patientRoutes = require('./routes/patient.routes');
+const dossierMedicalRoutes = require('./routes/dossierMedical.routes');
 
 const app = express();
 app.use(express.json());
 
 // Routes
 app.use('/api/patients', patientRoutes);
+app.use('/api/dossierMedicals', dossierMedicalRoutes);
 
 // Synchronisation avec la base de données
 sequelize.sync({ force: false }).then(() => {

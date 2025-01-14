@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-// Définir le modèle Patient
 const Patient = sequelize.define('Patient', {
   id: {
     type: DataTypes.INTEGER,
@@ -34,8 +33,8 @@ const Patient = sequelize.define('Patient', {
     allowNull: false,
   },
 }, {
-  tableName: 'patients', // Nom de la table dans MySQL
-  timestamps: true,      // Ajoute createdAt et updatedAt
+  tableName: 'patients',
+  timestamps: true,
 });
 
 module.exports = Patient;
