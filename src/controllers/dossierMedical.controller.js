@@ -34,11 +34,19 @@ const createDossierMedical = async (req, res) => {
 const updateDossierMedical = async (req, res) => {
   try {
     const updatedDossier = await dossierMedicalService.updateDossierMedical(req.params.id, req.body);
-    res.json(updatedDossier);
+
+    if (!updatedDossier) {
+      // Si aucun dossier n'a été trouvé ou mis à jour
+      return res.status(404).json({ message: "Dossier médical introuvable" });
+    }
+
+    res.json({ message: "Dossier médical mis à jour avec succès", dossier: updatedDossier });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: error.message || 'Erreur serveur' });
   }
 };
+
 
 // Supprimer un dossier médical
 const deleteDossierMedical = async (req, res) => {

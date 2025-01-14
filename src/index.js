@@ -5,7 +5,6 @@ const dossierMedicalRoutes = require('./routes/dossierMedical.routes');
 const medecinRoutes = require('./routes/medecin.routes'); 
 const assistantRoutes = require('./routes/assistant.routes'); 
 
-
 const app = express();
 app.use(express.json());
 

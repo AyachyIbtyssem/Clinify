@@ -1,9 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Patient = require('./patient.model');  // Import after defining the Patient model
+const Patient = require('./patient.model');
+const Medecin = require('./medecin.model');
 
 const DossierMedical = sequelize.define('DossierMedical', {
-  idDossier: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -23,6 +24,13 @@ const DossierMedical = sequelize.define('DossierMedical', {
         key: "id"
     }
   },
+  medecinId: {
+    type: DataTypes.INTEGER,
+    references: {
+        model: Medecin,
+        key: "id"
+    }
+  },
 }, {
   tableName: 'dossiers_medicals',
   timestamps: true,
@@ -30,5 +38,6 @@ const DossierMedical = sequelize.define('DossierMedical', {
 
 // Define the foreign key relationship after importing the Patient model
 DossierMedical.belongsTo(Patient, { as: 'Patient', foreignKey: 'patientId' });
+DossierMedical.belongsTo(Medecin, { as: 'Medecin', foreignKey: 'medecinId' });
 
 module.exports = DossierMedical;
