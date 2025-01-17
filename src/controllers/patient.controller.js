@@ -1,4 +1,4 @@
-const patientService = require('../services/patient.service');
+const patientService = require("../services/patient.service");
 
 // Récupérer tous les patients
 const getPatients = async (req, res) => {
@@ -33,7 +33,10 @@ const createPatient = async (req, res) => {
 // Mettre à jour un patient
 const updatePatient = async (req, res) => {
   try {
-    const updatedPatient = await patientService.updatePatient(req.params.id, req.body);
+    const updatedPatient = await patientService.updatePatient(
+      req.params.id,
+      req.body
+    );
     res.json(updatedPatient);
   } catch (error) {
     res.status(404).json({ message: error.message });
