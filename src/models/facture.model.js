@@ -14,7 +14,7 @@ const Facture = sequelize.define('Facture', {
     allowNull: false,
   },
   detailsTraitements: {
-    type: DataTypes.JSON, // Utilisation de JSON pour stocker une liste de traitements
+    type: DataTypes.STRING, // Utilisation de JSON pour stocker une liste de traitements
     allowNull: false,
   },
   statut: {

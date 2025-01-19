@@ -19,5 +19,13 @@
   "devDependencies": {
     "nodemon": "^3.1.9",
     "sequelize-cli": "^6.6.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AyachyIbtyssem/Clinify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AyachyIbtyssem/Clinify/issues"
+  },
+  "homepage": "https://github.com/AyachyIbtyssem/Clinify#readme"
 }
