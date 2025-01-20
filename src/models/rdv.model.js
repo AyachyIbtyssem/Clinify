@@ -8,8 +8,8 @@ const RendezVous = sequelize.define(
   {
     idRDV: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -27,23 +27,29 @@ const RendezVous = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    IdPatient: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Patient,
+        key: "id",
+      },
+    },
+    IdMedecin: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Medecin,
+        key: "id",
+      },
+    },
   },
   {
-    tableName: "rendezvous", // Nom de la table dans la base de données
+    tableName: "rendezvous", // Nom de la table dans MySQL
     timestamps: true, // Ajoute createdAt et updatedAt
   }
 );
 
-// Associations avec Patient et Medecin
-RendezVous.belongsTo(Patient, { foreignKey: "IdPatient", onDelete: "CASCADE" });
-RendezVous.belongsTo(Medecin, { foreignKey: "IdMedecin", onDelete: "CASCADE" });
+// Définir les relations
+RendezVous.belongsTo(Patient, { as: "Patient", foreignKey: "IdPatient" });
+RendezVous.belongsTo(Medecin, { as: "Medecin", foreignKey: "IdMedecin" });
 
-// Synchronisation de la table RendezVous
-RendezVous.sync({ alter: true })
-  .then(() => {
-    console.log("Table rendezvous vérifiée ou créée avec succès.");
-  })
-  .catch((error) => {
-    console.error("Erreur lors de la création de la table rendezvous", error);
-  });
 module.exports = RendezVous;
