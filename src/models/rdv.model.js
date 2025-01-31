@@ -2,6 +2,9 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const Patient = require("./patient.model");
 const Medecin = require("./medecin.model");
+const Salle = require("./salle.model");
+
+/*const Consultation = require("./consultation.model");*/
 
 const RendezVous = sequelize.define(
   "RendezVous",
@@ -41,6 +44,14 @@ const RendezVous = sequelize.define(
         key: "id",
       },
     },
+    salleId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Salle, // Référence au modèle Salle
+        key: "idSalle",
+      },
+      allowNull: true, // Permettre à un rendez-vous de ne pas avoir de salle
+    },
   },
   {
     tableName: "rendezvous", // Nom de la table dans MySQL
@@ -51,5 +62,15 @@ const RendezVous = sequelize.define(
 // Définir les relations
 RendezVous.belongsTo(Patient, { as: "Patient", foreignKey: "IdPatient" });
 RendezVous.belongsTo(Medecin, { as: "Medecin", foreignKey: "IdMedecin" });
+RendezVous.belongsTo(Salle, { as: "Salle", foreignKey: "salleId" });
+
+Salle.hasMany(RendezVous, { as: "RendezVous", foreignKey: "salleId" });
+Medecin.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdMedecin" });
+Patient.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdPatient" });
+
+/*RendezVous.hasOne(Consultation, {
+  as: "Consultation", // Alias de l'association
+  foreignKey: "rendezVousId",
+});*/
 
 module.exports = RendezVous;

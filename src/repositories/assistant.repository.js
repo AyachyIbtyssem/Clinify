@@ -1,4 +1,4 @@
-const Assistant = require('../models/assistant.model');
+const Assistant = require("../models/assistant.model");
 
 // Récupérer tous les assistants
 const findAllAssistants = () => {

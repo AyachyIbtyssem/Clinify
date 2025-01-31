@@ -5,6 +5,7 @@ const medecinRoutes = require("./routes/medecin.routes");
 const rdvRoutes = require("./routes/rdv.routes");
 const salleRoutes = require("./routes/salle.routes");
 const consultationRoutes = require("./routes/consultation.routes");
+const paiementRoutes = require("./routes/paiement.routes");
 
 //
 const Patient = require("./models/patient.model");
@@ -20,6 +21,7 @@ app.use("/api/medecins", medecinRoutes);
 app.use("/api/rendezvous", rdvRoutes);
 app.use("/api/salles", salleRoutes);
 app.use("/api/consultations", consultationRoutes);
+app.use("/api/paiements", paiementRoutes);
 
 // Synchronisation avec la base de données
 sequelize
