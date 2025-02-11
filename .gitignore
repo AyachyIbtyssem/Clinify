@@ -9,3 +9,6 @@ yarn-error.log*
 # Ignorer les fichiers temporaires du système
 .DS_Store
 Thumbs.db
+
+# Ignorer les fichiers de configuration sensibles
+.env

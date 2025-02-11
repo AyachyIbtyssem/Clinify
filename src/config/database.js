@@ -6,8 +6,8 @@ const mysql = require("mysql2/promise"); // Import du package mysql2 pour exécu
   try {
     const connection = await mysql.createConnection({
       host: "localhost",
-      user: "chaima",
-      password: "chaima", // Remplacez par votre mot de passe MySQL
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS, // Remplacez par votre mot de passe MySQL
     });
 
     await connection.query("CREATE DATABASE IF NOT EXISTS clinify");
@@ -18,7 +18,7 @@ const mysql = require("mysql2/promise"); // Import du package mysql2 pour exécu
 })();
 
 // Configuration de la base de données Sequelize
-const sequelize = new Sequelize("clinify", "chaima", "chaima", {
+const sequelize = new Sequelize("clinify", process.env.DB_PASS, process.env.DB_PASS, {
   host: "localhost", // Adresse de votre serveur MySQLm
   dialect: "mysql", // Type de base de données
 });
