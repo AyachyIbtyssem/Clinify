@@ -44,7 +44,7 @@ const RendezVous = sequelize.define(
         key: "id",
       },
     },
-    salleId: {
+    IdSalle: {
       type: DataTypes.INTEGER,
       references: {
         model: Salle, // Référence au modèle Salle
@@ -62,9 +62,11 @@ const RendezVous = sequelize.define(
 // Définir les relations
 RendezVous.belongsTo(Patient, { as: "Patient", foreignKey: "IdPatient" });
 RendezVous.belongsTo(Medecin, { as: "Medecin", foreignKey: "IdMedecin" });
-RendezVous.belongsTo(Salle, { as: "Salle", foreignKey: "salleId" });
 
-Salle.hasMany(RendezVous, { as: "RendezVous", foreignKey: "salleId" });
+
+RendezVous.belongsTo(Salle, { as: "Salle", foreignKey: "IdSalle" });
+Salle.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdSalle" });
+
 Medecin.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdMedecin" });
 Patient.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdPatient" });
 

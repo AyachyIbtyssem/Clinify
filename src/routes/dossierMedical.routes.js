@@ -1,7 +1,8 @@
 const express = require('express');
+const router = express.Router();
 const dossierMedicalController = require('../controllers/dossierMedical.controller');
 
-const router = express.Router();
+
 
 // Routes pour DossierMedical
 router.post('/', dossierMedicalController.createDossierMedical);

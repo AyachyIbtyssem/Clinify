@@ -29,7 +29,7 @@ const Consultation = sequelize.define(
     },
     rendezVousId: {
       type: DataTypes.INTEGER,
-      unique: true,
+      allowNull: false, // Assure que le rendez-vous est toujours requis
       references: {
         model: RendezVous, // Référence au modèle RendezVous
         key: "idRDV",
@@ -37,6 +37,7 @@ const Consultation = sequelize.define(
     },
     patientId: {
       type: DataTypes.INTEGER,
+      allowNull: false, // Assure qu'un patient est toujours requis
       references: {
         model: Patient,
         key: "id",
@@ -49,16 +50,10 @@ const Consultation = sequelize.define(
   }
 );
 
-// Définir les relations
-Consultation.belongsTo(Patient, { as: "Patient", foreignKey: "patientId" });
-Consultation.belongsTo(RendezVous, {
-  as: "RendezVous",
-  foreignKey: "rendezVousId",
-});
-RendezVous.hasOne(Consultation, {
-  as: "Consultation", // Alias de l'association
-  foreignKey: "rendezVousId",
-});
-Patient.hasMany(Consultation, { as: "Consultations", foreignKey: "patientId" });
+Consultation.belongsTo(Patient, { as: "patient", foreignKey: "patientId" });
+Consultation.belongsTo(RendezVous, { as: "rendezVous", foreignKey: "rendezVousId" });
+
+RendezVous.hasOne(Consultation, { as: "consultation", foreignKey: "rendezVousId" });
+Patient.hasMany(Consultation, { as: "consultations", foreignKey: "patientId" });
 
 module.exports = Consultation;

@@ -26,18 +26,18 @@ app.use("/api/rendezvous", rdvRoutes);
 app.use("/api/salles", salleRoutes);
 app.use("/api/consultations", consultationRoutes);
 app.use("/api/paiements", paiementRoutes);
-app.use("/api/dossier-medical", dossierMedicalRoutes);
+app.use("/api/dossier-medical", dossierMedicalRoutes); 
 app.use("/api/assistants", assistantRoutes);
-app.use("/api/traitements", traitementRoutes);
-app.use("/api/factures", factureRoutes);
+app.use("/api/traitements", traitementRoutes); 
+app.use("/api/factures", factureRoutes); 
 // Synchronisation avec la base de données
 sequelize
-  .sync({ force: false })
+  .sync({ alter: true }) // Permet de modifier la structure de la DB sans perdre de données
   .then(() => {
-    console.log("Database connected and models synchronized.");
+    console.log("Base de données mise à jour avec succès.");
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () =>
-      console.log(`Server running on http://localhost:${PORT}`)
+      console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
     );
   })
-  .catch((err) => console.error("Error connecting to the database:", err));
+  .catch((err) => console.error("Erreur de synchronisation de la base :", err));
