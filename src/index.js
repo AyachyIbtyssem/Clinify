@@ -2,9 +2,6 @@ const express = require("express");
 const sequelize = require("./config/database");
 
 // Importer les modèles
-const Patient = require("./models/patient.model");
-const Medecin = require("./models/medecin.model");
-const RendezVous = require("./models/rdv.model");  // Assurez-vous que ce modèle est bien défini
 const salleRoutes = require("./routes/salle.routes");
 const patientRoutes = require("./routes/patient.routes");
 const dossierMedicalRoutes = require('./routes/dossierMedical.routes');
@@ -12,15 +9,10 @@ const medecinRoutes = require("./routes/medecin.routes");
 const assistantRoutes = require('./routes/assistant.routes'); 
 const traitementRoutes = require('./routes/traitement.routes'); 
 const factureRoutes = require('./routes/facture.routes'); 
-
+const rendezVousRoutes = require('./routes/rdv.routes');
 const app = express();
 app.use(express.json());
 
-// Définir les associations
-Patient.hasMany(RendezVous, { foreignKey: "IdPatient" });
-Medecin.hasMany(RendezVous, { foreignKey: "IdMedecin" });
-RendezVous.belongsTo(Patient, { foreignKey: "IdPatient", onDelete: "CASCADE" });
-RendezVous.belongsTo(Medecin, { foreignKey: "IdMedecin", onDelete: "CASCADE" });
 
 // Définir les routes
 app.use("/api/rendezvous", rendezVousRoutes);
