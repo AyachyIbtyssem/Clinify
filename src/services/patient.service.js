@@ -1,4 +1,8 @@
 const patientRepository = require("../repositories/patient.repository");
+const Patient = require("../models/patient.model");
+const DossierMedical = require("../models/dossierMedical.model");
+const Medecin = require("../models/medecin.model");
+const RendezVous = require("../models/rdv.model");
 
 // Récupérer tous les patients
 const getAllPatients = async () => {
@@ -41,10 +45,54 @@ const deletePatient = async (id) => {
   return deleted;
 };
 
+// Consulter le dossier médical d'un patient par ID
+const consulterDossierMedical = async (patientId) => {
+  try {
+    const dossiers = await DossierMedical.findAll({
+      where: { patientId: patientId }, // Filtrer par patientId
+      include: [
+        {
+          model: Patient,
+          as: "Patient",
+          attributes: ["firstName", "lastName"],
+        }, // Inclure les infos du patient
+        {
+          model: Medecin,
+          as: "Medecin",
+          attributes: ["firstName", "lastName"],
+        }, // Inclure les infos du médecin
+      ],
+    });
+
+    if (!dossiers || dossiers.length === 0) {
+      throw new Error("Aucun dossier médical trouvé pour ce patient");
+    }
+
+    return dossiers; // Retourne les dossiers trouvés
+  } catch (error) {
+    throw new Error(error.message); // Gérer les erreurs
+  }
+};
+
+// Fonction pour prendre un rendez-vous
+const prendreRendezvous = async (rendezVousData) => {
+  try {
+    // Créer un nouveau rendez-vous
+    const nouveauRendezVous = await RendezVous.create(rendezVousData);
+    return nouveauRendezVous;
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la prise de rendez-vous : ${error.message}`
+    );
+  }
+};
+
 module.exports = {
   getAllPatients,
   getPatientById,
   addPatient,
   updatePatient,
   deletePatient,
+  consulterDossierMedical,
+  prendreRendezvous,
 };

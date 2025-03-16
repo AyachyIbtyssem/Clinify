@@ -1,4 +1,4 @@
-const medecinService = require('../services/medecin.service');
+const medecinService = require("../services/medecin.service");
 
 // Récupérer tous les médecins
 const getMedecins = async (req, res) => {
@@ -33,7 +33,10 @@ const createMedecin = async (req, res) => {
 // Mettre à jour un médecin
 const updateMedecin = async (req, res) => {
   try {
-    const updatedMedecin = await medecinService.updateMedecin(req.params.id, req.body);
+    const updatedMedecin = await medecinService.updateMedecin(
+      req.params.id,
+      req.body
+    );
     res.json(updatedMedecin);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -49,6 +52,28 @@ const deleteMedecin = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+// Voir la liste des rendez-vous d'un médecin
+const voirLaListeDesRendezVous = async (req, res) => {
+  try {
+    const medecinId = parseInt(req.params.medecinId, 10); // Récupérer l'ID du médecin depuis les paramètres de la route
+    const rendezVous = await medecinService.voirLaListeDesRendezVous(medecinId); // Appeler la fonction du service
+    res.status(200).json(rendezVous); // Retourner la liste des rendez-vous
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Gérer les erreurs
+  }
+};
+// Vérifier le dossier médical d'un patient
+const verifierDossierPatient = async (req, res) => {
+  try {
+    const patientId = parseInt(req.params.patientId, 10);
+    const dossierMedical = await medecinService.verifierDossierPatient(
+      patientId
+    );
+    res.status(200).json(dossierMedical);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 module.exports = {
   getMedecins,
@@ -56,4 +81,6 @@ module.exports = {
   createMedecin,
   updateMedecin,
   deleteMedecin,
+  voirLaListeDesRendezVous,
+  verifierDossierPatient,
 };

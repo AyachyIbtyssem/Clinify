@@ -36,11 +36,22 @@ const Medecin = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    NumSalle: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    NomDept: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     tableName: "medecins", // Nom de la table dans MySQL
     timestamps: true, // Ajoute createdAt et updatedAt
   }
 );
+//nom dept ,num salle
 
 module.exports = Medecin;

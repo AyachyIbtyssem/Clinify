@@ -1,4 +1,5 @@
 const rdvRepository = require("../repositories/rdv.repository");
+const RendezVous = require("../models/rdv.model");
 
 // Récupérer tous les rendez-vous
 const getAllRendezVous = async () => {
@@ -38,10 +39,62 @@ const deleteRendezVous = async (id) => {
   return deleted;
 };
 
+const annulerRendezVous = async (idRDV) => {
+  try {
+    const rendezVous = await rdvRepository.annulerRendezVous(idRDV);
+    return rendezVous;
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de l'annulation du rendez-vous : ${error.message}`
+    );
+  }
+};
+
+////modifier date et heure d'un rdv par son id
+const modifierRendezVous = async (id, date, heure) => {
+  try {
+    const rdv = await rdvRepository.findRendezVousById(id);
+    if (!rdv) {
+      throw new Error("Rendez-vous non trouvé");
+    }
+
+    // Mettre à jour la date et l'heure
+    rdv.date = date;
+    rdv.heure = heure;
+
+    // Sauvegarder les modifications
+    const updatedRdv = await rdv.save();
+    return updatedRdv;
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la modification du rendez-vous : ${error.message}`
+    );
+  }
+};
+
+//confirmé un rdv
+const confirmerRendezvous = async (id) => {
+  try {
+    const rdv = await RendezVous.findByPk(id);
+    if (!rdv) {
+      throw new Error("Rendez-vous non trouvé");
+    }
+    rdv.statut = "validé";
+    const updatedRdv = await rdv.save();
+    return updatedRdv;
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la confirmation du rendez-vous : ${error.message}`
+    );
+  }
+};
 module.exports = {
   getAllRendezVous,
   getRendezVousById,
   addRendezVous,
   updateRendezVous,
   deleteRendezVous,
+  annulerRendezVous,
+  modifierRendezVous,
+  confirmerRendezvous,
 };

@@ -2,7 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const Patient = require("./patient.model");
 const Medecin = require("./medecin.model");
-const Salle = require("./salle.model");
 
 /*const Consultation = require("./consultation.model");*/
 
@@ -22,9 +21,17 @@ const RendezVous = sequelize.define(
       type: DataTypes.TIME,
       allowNull: false,
     },
+    /*statut: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },*/
     statut: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "en attente", // Valeur par défaut
+      validate: {
+        isIn: [["en attente", "validé", "échoué"]], // Validation des statuts
+      },
     },
     typeRendezVous: {
       type: DataTypes.STRING,
@@ -44,14 +51,6 @@ const RendezVous = sequelize.define(
         key: "id",
       },
     },
-    IdSalle: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Salle, // Référence au modèle Salle
-        key: "idSalle",
-      },
-      allowNull: true, // Permettre à un rendez-vous de ne pas avoir de salle
-    },
   },
   {
     tableName: "rendezvous", // Nom de la table dans MySQL
@@ -62,10 +61,6 @@ const RendezVous = sequelize.define(
 // Définir les relations
 RendezVous.belongsTo(Patient, { as: "Patient", foreignKey: "IdPatient" });
 RendezVous.belongsTo(Medecin, { as: "Medecin", foreignKey: "IdMedecin" });
-
-
-RendezVous.belongsTo(Salle, { as: "Salle", foreignKey: "IdSalle" });
-Salle.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdSalle" });
 
 Medecin.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdMedecin" });
 Patient.hasMany(RendezVous, { as: "RendezVous", foreignKey: "IdPatient" });

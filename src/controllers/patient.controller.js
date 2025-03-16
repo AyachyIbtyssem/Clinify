@@ -53,10 +53,42 @@ const deletePatient = async (req, res) => {
   }
 };
 
+const consulterDossierMedical = async (req, res) => {
+  try {
+    const patientId = req.params.id; // Récupérer l'ID du patient depuis les paramètres de la requête
+    const dossiers = await patientService.consulterDossierMedical(patientId); // Appeler la fonction du service
+    res.json(dossiers); // Renvoyer les résultats au client
+  } catch (error) {
+    res.status(404).json({ message: error.message }); // Gérer les erreurs
+  }
+};
+
+const prendreRendezvous = async (req, res) => {
+  try {
+    const rendezVousData = req.body; // Récupérer les données du rendez-vous depuis le corps de la requête
+
+    // Appeler la fonction du service pour prendre un rendez-vous
+    const nouveauRendezVous = await patientService.prendreRendezvous(
+      rendezVousData
+    );
+
+    // Réponse réussie
+    res.status(201).json({
+      message: "Rendez-vous pris avec succès",
+      rendezVous: nouveauRendezVous,
+    });
+  } catch (error) {
+    // Gestion des erreurs
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPatients,
   getPatient,
   createPatient,
   updatePatient,
   deletePatient,
+  consulterDossierMedical,
+  prendreRendezvous,
 };
