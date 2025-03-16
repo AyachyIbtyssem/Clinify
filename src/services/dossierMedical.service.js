@@ -1,4 +1,4 @@
-const dossierMedicalRepository = require('../repositories/dossierMedical.repository');
+const dossierMedicalRepository = require("../repositories/dossierMedical.repository");
 
 // Récupérer tous les dossiers médicaux
 const getAllDossiersMedical = async () => {
@@ -7,23 +7,32 @@ const getAllDossiersMedical = async () => {
 
 // Récupérer un dossier médical par ID
 const getDossierMedicalById = async (id) => {
-  const dossierMedical = await dossierMedicalRepository.findDossierMedicalById(id);
+  const dossierMedical = await dossierMedicalRepository.findDossierMedicalById(
+    id
+  );
   if (!dossierMedical) {
-    throw new Error('Dossier médical non trouvé');
+    throw new Error("Dossier médical non trouvé");
   }
   return dossierMedical;
 };
 
 // Ajouter un nouveau dossier médical
 const addDossierMedical = async (dossierMedicalData) => {
-  return await dossierMedicalRepository.createDossierMedical(dossierMedicalData);
+  return await dossierMedicalRepository.createDossierMedical(
+    dossierMedicalData
+  );
 };
 
 // Mettre à jour un dossier médical par ID
 const updateDossierMedical = async (id, dossierMedicalData) => {
-  const updatedDossier = await dossierMedicalRepository.updateDossierMedicalById(id, dossierMedicalData);
-  if (updatedDossier[0] === 0) { // Sequelize retourne [nombre de lignes affectées]
-    throw new Error('Dossier médical non trouvé');
+  const updatedDossier =
+    await dossierMedicalRepository.updateDossierMedicalById(
+      id,
+      dossierMedicalData
+    );
+  if (updatedDossier[0] === 0) {
+    // Sequelize retourne [nombre de lignes affectées]
+    throw new Error("Dossier médical non trouvé");
   }
   return updatedDossier;
 };
@@ -32,7 +41,7 @@ const updateDossierMedical = async (id, dossierMedicalData) => {
 const deleteDossierMedical = async (id) => {
   const deleted = await dossierMedicalRepository.deleteDossierMedicalById(id);
   if (!deleted) {
-    throw new Error('Dossier médical non trouvé');
+    throw new Error("Dossier médical non trouvé");
   }
   return deleted;
 };

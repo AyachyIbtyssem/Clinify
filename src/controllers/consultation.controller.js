@@ -73,10 +73,83 @@ const deleteConsultation = async (req, res) => {
   }
 };
 
+const ajouterOrdonnance = async (req, res) => {
+  try {
+    const idConsultation = parseInt(req.params.id, 10);
+    const { ordonnance } = req.body; // Récupérer l'ordonnance depuis le corps de la requête
+    const consultation = await consultationService.ajouterOrdonnance(
+      idConsultation,
+      ordonnance
+    );
+    res.status(200).json(consultation);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const getDetailsConsultation = async (req, res) => {
+  try {
+    const idConsultation = parseInt(req.params.id, 10);
+    const details = await consultationService.getDetailsConsultation(
+      idConsultation
+    );
+    res.status(200).send(details);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+// Récupérer l'historique des consultations d'un patient
+const consulterHistoriqueConsultations = async (req, res) => {
+  try {
+    const patientId = parseInt(req.params.patientId, 10);
+    const consultations =
+      await consultationService.consulterHistoriqueConsultations(patientId);
+    res.status(200).json(consultations);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const ajouterDiagnostic = async (req, res) => {
+  try {
+    const idConsultation = parseInt(req.params.id, 10);
+    const { diagnostic } = req.body; // Récupérer le diagnostic depuis le corps de la requête
+    const consultation = await consultationService.ajouterDiagnostic(
+      idConsultation,
+      diagnostic
+    );
+    res.status(200).json(consultation);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const modifierConsultation = async (req, res) => {
+  try {
+    const idConsultation = parseInt(req.params.id, 10);
+    const consultationData = req.body;
+    const updatedConsultation = await consultationService.modifierConsultation(
+      idConsultation,
+      consultationData
+    );
+    res.status(200).json({
+      message: "Consultation mise à jour avec succès",
+      consultation: updatedConsultation,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getConsultations,
   getConsultation,
   createConsultation,
   updateConsultation,
   deleteConsultation,
+  ajouterOrdonnance,
+  getDetailsConsultation,
+  consulterHistoriqueConsultations,
+  ajouterDiagnostic,
+  modifierConsultation,
 };

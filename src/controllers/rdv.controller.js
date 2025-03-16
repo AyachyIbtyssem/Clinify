@@ -53,10 +53,64 @@ const deleteRendezVous = async (req, res) => {
   }
 };
 
+const annulerRendezVous = async (req, res) => {
+  try {
+    const { id } = req.params; // ID du rendez-vous
+
+    const rendezVous = await rdvService.annulerRendezVous(id);
+
+    res.status(200).json({
+      message: "Rendez-vous annulé avec succès",
+      rendezVous: rendezVous,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+//modifier date et heure d'un rdv par son id
+const modifierRendezVous = async (req, res) => {
+  try {
+    const { id } = req.params; // ID du rendez-vous
+    const { date, heure } = req.body; // Nouvelle date et heure
+
+    const updatedRendezVous = await rdvService.modifierRendezVous(
+      id,
+      date,
+      heure
+    );
+    res.status(200).json(updatedRendezVous);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+//confirmer un rdv par son id (statu devient confirmé)
+const confirmerRendezvous = async (req, res) => {
+  try {
+    const { id } = req.params; // ID du rendez-vous
+
+    // Appeler la fonction du service pour confirmer le rendez-vous
+    const rendezVousConfirme = await rdvService.confirmerRendezvous(id);
+
+    // Réponse réussie
+    res.status(200).json({
+      message: "Rendez-vous confirmé avec succès",
+      rendezVous: rendezVousConfirme,
+    });
+  } catch (error) {
+    // Gestion des erreurs
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getRendezVous,
   getRendezVousById,
   createRendezVous,
   updateRendezVous,
   deleteRendezVous,
+  annulerRendezVous,
+  modifierRendezVous,
+  confirmerRendezvous,
 };

@@ -2,7 +2,6 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const Patient = require("./patient.model");
 const Medecin = require("./medecin.model");
-const Salle = require("./salle.model");
 
 /*const Consultation = require("./consultation.model");*/
 
@@ -22,9 +21,17 @@ const RendezVous = sequelize.define(
       type: DataTypes.TIME,
       allowNull: false,
     },
+    /*statut: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },*/
     statut: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "en attente", // Valeur par défaut
+      validate: {
+        isIn: [["en attente", "validé", "échoué"]], // Validation des statuts
+      },
     },
     typeRendezVous: {
       type: DataTypes.STRING,
