@@ -58,10 +58,55 @@ const deleteDossierMedical = async (req, res) => {
   }
 };
 
+// ✅ Ajouter une analyse
+const ajouterAnalyse = async (req, res) => {
+  try {
+      const { id } = req.params; // ID du patient
+      const { analyse } = req.body; // Nouvelle analyse à ajouter
+
+      if (!analyse) {
+          return res.status(400).json({ message: "L'analyse est requise." });
+      }
+
+      const dossierMisAJour = await dossierMedicalService.ajouterAnalyse(id, analyse);
+
+      res.json({
+          message: "Analyse ajoutée avec succès",
+          dossierMedical: dossierMisAJour,
+      });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+// ✅ Vérifier si un patient a un dossier médical
+const verifierDossierPatient = async (req, res) => {
+  try {
+      console.log("🔍 Params reçus :", req.params); // Debug
+
+      const { id } = req.params;
+      if (!id) {
+          return res.status(400).json({ message: "L'ID du patient est requis." });
+      }
+
+      const existe = await dossierMedicalService.verifierDossierPatient(id);
+      res.json({ existe });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   getDossiersMedical,
   getDossierMedical,
   createDossierMedical,
   updateDossierMedical,
   deleteDossierMedical,
+  ajouterAnalyse,
+  verifierDossierPatient,
 };

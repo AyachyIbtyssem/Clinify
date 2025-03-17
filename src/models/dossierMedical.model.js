@@ -10,8 +10,9 @@ const DossierMedical = sequelize.define('DossierMedical', {
     autoIncrement: true,
   },
   analyse: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON, // Utilisation d'un tableau JSON
     allowNull: false,
+    defaultValue: [] // Initialise avec un tableau vide
   },
   statut: {
     type: DataTypes.STRING,

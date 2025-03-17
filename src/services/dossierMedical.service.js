@@ -46,10 +46,49 @@ const deleteDossierMedical = async (id) => {
   return deleted;
 };
 
+//  Ajouter une analyse à un dossier médical
+const ajouterAnalyse = async (patientId, nouvelleAnalyse) => {
+  if (!patientId || !nouvelleAnalyse) {
+      throw new Error("L'ID du patient et l'analyse sont requis.");
+  }
+
+  // Récupérer le dossier médical du patient
+  const dossierMedical = await dossierMedicalRepository.findDossierMedicalByPatientId(patientId);
+
+  if (!dossierMedical) {
+      throw new Error("Dossier médical introuvable pour ce patient.");
+  }
+
+  // Ajouter la nouvelle analyse au tableau
+  const analyses = Array.isArray(dossierMedical.analyse) ? dossierMedical.analyse : [];
+  analyses.push(nouvelleAnalyse);
+  
+  // Mettre à jour le dossier médical
+  dossierMedical.analyse = analyses;
+  await dossierMedical.save();
+
+  return dossierMedical;
+};
+
+
+
+//  Vérifier si un patient a un dossier médical
+const verifierDossierPatient = async (patientId) => {
+  if (!patientId) {
+      throw new Error("L'ID du patient est invalide.");
+  }
+  const dossier = await dossierMedicalRepository.findDossierMedicalByPatientId(patientId);
+  return dossier !== null;
+};
+
+
+
 module.exports = {
   getAllDossiersMedical,
   getDossierMedicalById,
   addDossierMedical,
   updateDossierMedical,
   deleteDossierMedical,
+  ajouterAnalyse,
+  verifierDossierPatient,
 };

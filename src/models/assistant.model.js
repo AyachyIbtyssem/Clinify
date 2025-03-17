@@ -29,6 +29,10 @@ const Assistant = sequelize.define('Assistant', {
     allowNull: false,
     unique: true,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   tableName: 'assistants', // Nom de la table dans MySQL
   timestamps: true,       // Ajoute createdAt et updatedAt

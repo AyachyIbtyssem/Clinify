@@ -21,6 +21,8 @@ const mysql = require("mysql2/promise"); // Import du package mysql2 pour exécu
 const sequelize = new Sequelize("clinify", "root", "", {
   host: "localhost", // Adresse de votre serveur MySQLm
   dialect: "mysql", // Type de base de données
+  logging: false, // Désactive les logs Sequelize
 });
 
 module.exports = sequelize;
+

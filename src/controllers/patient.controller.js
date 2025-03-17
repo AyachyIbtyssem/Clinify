@@ -65,23 +65,30 @@ const consulterDossierMedical = async (req, res) => {
 
 const prendreRendezvous = async (req, res) => {
   try {
-    const rendezVousData = req.body; // Récupérer les données du rendez-vous depuis le corps de la requête
+    const patientId = req.params.id; // Récupère l'ID du patient depuis l'URL
+    const rendezVousData = req.body; // Récupère les données envoyées
 
-    // Appeler la fonction du service pour prendre un rendez-vous
-    const nouveauRendezVous = await patientService.prendreRendezvous(
-      rendezVousData
-    );
+    // Vérifie si le patient existe
+    const patient = await patientService.getPatientById(patientId);
+    if (!patient) {
+      return res.status(404).json({ message: "Patient non trouvé" });
+    }
 
-    // Réponse réussie
+    // Ajoute l'ID du patient dans les données du rendez-vous
+    rendezVousData.IdPatient = patientId;
+
+    // Création du rendez-vous
+    const nouveauRendezVous = await patientService.prendreRendezvous(rendezVousData);
+    
     res.status(201).json({
       message: "Rendez-vous pris avec succès",
-      rendezVous: nouveauRendezVous,
+      rendezVous: nouveauRendezVous
     });
   } catch (error) {
-    // Gestion des erreurs
     res.status(400).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   getPatients,

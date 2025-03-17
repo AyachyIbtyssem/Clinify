@@ -10,5 +10,7 @@ router.get('/', dossierMedicalController.getDossiersMedical);
 router.get('/:id', dossierMedicalController.getDossierMedical);
 router.put('/:id', dossierMedicalController.updateDossierMedical);
 router.delete('/:id', dossierMedicalController.deleteDossierMedical);
+router.put('/ajouterAnalyse/:id', dossierMedicalController.ajouterAnalyse);
+router.get('/verifierDossier/:id', dossierMedicalController.verifierDossierPatient);
 
 module.exports = router;

@@ -25,10 +25,20 @@ const deletePatientById = (id) => {
   return Patient.destroy({ where: { id } });
 };
 
+const updatePassword = async (email, hashedPassword) => {
+  const patient = await findByEmail(email);
+  if (!patient) return null;
+  
+  patient.password = hashedPassword;
+  await patient.save();
+  return patient;
+};
+
 module.exports = {
   findAllPatients,
   findPatientById,
   createPatient,
   updatePatientById,
   deletePatientById,
+  updatePassword,
 };

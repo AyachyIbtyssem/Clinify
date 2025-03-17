@@ -23,6 +23,10 @@ const Medecin = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     phone: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -37,12 +41,12 @@ const Medecin = sequelize.define(
       allowNull: false,
     },
 
-    NumSalle: {
+    numSalle: {
       type: DataTypes.STRING,
       allowNull: false,
     },
 
-    NomDept: {
+    nomDept: {
       type: DataTypes.STRING,
       allowNull: false,
     },

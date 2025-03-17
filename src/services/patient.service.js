@@ -77,15 +77,35 @@ const consulterDossierMedical = async (patientId) => {
 // Fonction pour prendre un rendez-vous
 const prendreRendezvous = async (rendezVousData) => {
   try {
-    // Créer un nouveau rendez-vous
-    const nouveauRendezVous = await RendezVous.create(rendezVousData);
+    // Vérifier si le patient existe
+    const patient = await Patient.findByPk(rendezVousData.IdPatient);
+    if (!patient) {
+      throw new Error("Patient non trouvé");
+    }
+
+    // Vérifier si le médecin existe
+    const medecin = await Medecin.findByPk(rendezVousData.IdMedecin);
+    if (!medecin) {
+      throw new Error("Médecin non trouvé");
+    }
+
+    // Créer le rendez-vous
+    const nouveauRendezVous = await RendezVous.create({
+      date: rendezVousData.date,
+      heure: rendezVousData.heure,
+      statut: "en attente", // Par défaut
+      typeRendezVous: rendezVousData.typeRendezVous,
+      IdPatient: rendezVousData.IdPatient,
+      IdMedecin: rendezVousData.IdMedecin,
+    });
+
     return nouveauRendezVous;
   } catch (error) {
-    throw new Error(
-      `Erreur lors de la prise de rendez-vous : ${error.message}`
-    );
+    throw new Error(`Erreur lors de la prise de rendez-vous : ${error.message}`);
   }
 };
+
+
 
 module.exports = {
   getAllPatients,

@@ -46,7 +46,7 @@ const findAllRendezVousByMedecinId = (medecinId) => {
       {
         model: Medecin,
         as: "Medecin",
-        attributes: ["NumSalle", "NomDept"], // Ajouter les champs du médecin
+        attributes: ["numSalle", "nomDept"], // Ajouter les champs du médecin
       },
     ],
     order: [
