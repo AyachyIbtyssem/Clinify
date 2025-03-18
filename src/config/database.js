@@ -5,9 +5,13 @@ const mysql = require("mysql2/promise"); // Import du package mysql2 pour exécu
 (async () => {
   try {
     const connection = await mysql.createConnection({
-      host: "localhost",
+      /*host: "localhost",//partie ibtissem
       user: "root",
-      password: "", // Remplacez par votre mot de passe MySQL
+      password: "", */ // Remplacez par votre mot de passe MySQL
+
+      host: "localhost",
+      user: "chaima",
+      password: "chaima",
     });
 
     await connection.query("CREATE DATABASE IF NOT EXISTS clinify");
@@ -18,11 +22,11 @@ const mysql = require("mysql2/promise"); // Import du package mysql2 pour exécu
 })();
 
 // Configuration de la base de données Sequelize
-const sequelize = new Sequelize("clinify", "root", "", {
+/*const sequelize = new Sequelize("clinify", "root", "", {*/ //partie ibtissem
+const sequelize = new Sequelize("clinify", "chaima", "chaima", {
   host: "localhost", // Adresse de votre serveur MySQLm
   dialect: "mysql", // Type de base de données
   logging: false, // Désactive les logs Sequelize
 });
 
 module.exports = sequelize;
-

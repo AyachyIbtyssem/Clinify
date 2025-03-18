@@ -101,7 +101,7 @@ const confirmerRendezvous = async (req, res) => {
   } catch (error) {
     // Gestion des erreurs
     res.status(400).json({ message: error.message });
-  } 
+  }
 };
 const getRendezVousByDate = async (req, res) => {
   try {
