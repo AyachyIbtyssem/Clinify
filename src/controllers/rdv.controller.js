@@ -101,6 +101,15 @@ const confirmerRendezvous = async (req, res) => {
   } catch (error) {
     // Gestion des erreurs
     res.status(400).json({ message: error.message });
+  } 
+};
+const getRendezVousByDate = async (req, res) => {
+  try {
+    const { date } = req.params;
+    const rendezVous = await rdvService.getRendezVousByDate(date);
+    res.status(200).json(rendezVous);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -113,4 +122,5 @@ module.exports = {
   annulerRendezVous,
   modifierRendezVous,
   confirmerRendezvous,
+  getRendezVousByDate,
 };

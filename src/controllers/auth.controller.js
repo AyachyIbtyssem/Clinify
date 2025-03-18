@@ -14,14 +14,14 @@ const register = async (req, res) => {
 // 🔹 CONNEXION
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body; // ✅ Vérifie que `req.body` contient `email` et `password`
-    
+    const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({ message: "Email et mot de passe requis" });
     }
 
-    const { token, user } = await authService.loginUser(email, password);
-    res.status(200).json({ token, role: user.role });
+    const { token, role } = await authService.loginUser(email, password);
+    res.status(200).json({ token, role });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

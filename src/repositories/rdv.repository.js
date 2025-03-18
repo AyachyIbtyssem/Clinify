@@ -105,6 +105,14 @@ const confirmerRendezvous = async (id) => {
       `Erreur lors de la confirmation du rendez-vous : ${error.message}`
     );
   }
+
+  
+  
+};
+const findRendezVousByDate = async (date) => {
+  return await RendezVous.findAll({
+    where: { date: date },
+  });
 };
 
 module.exports = {
@@ -117,4 +125,5 @@ module.exports = {
   annulerRendezVous,
   modifierRendezVous,
   confirmerRendezvous,
+  findRendezVousByDate,
 };

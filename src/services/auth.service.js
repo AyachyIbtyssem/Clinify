@@ -4,7 +4,10 @@ const jwt = require("jsonwebtoken");
 // Importation des modèles
 const Patient = require("../models/patient.model");
 const Medecin = require("../models/medecin.model");
-const Assistant = require("../models/assistant.model");
+const Assistant = require("../models/assistant.model")
+
+//secret key
+const SECRET_KEY = "super_secret_key";
 
 const registerUser = async ({ firstName, lastName, email, password, phone, address, dateOfBirth, specialty, numSalle, nomDept, role }) => {
   // Vérifier si l'email existe déjà dans une des tables
@@ -36,19 +39,33 @@ const registerUser = async ({ firstName, lastName, email, password, phone, addre
 
 // 🔹 CONNEXION
 const loginUser = async (email, password) => {
-  const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error("Utilisateur non trouvé");
+  let user = await Patient.findOne({ where: { email } });
+  let role = "patient";
+
+  if (!user) {
+    user = await Medecin.findOne({ where: { email } });
+    role = "medecin";
+  }
+
+  if (!user) {
+    user = await Assistant.findOne({ where: { email } });
+    role = "assistant";
+  }
+
+  if (!user) {
+    throw new Error("Utilisateur non trouvé");
+  }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Mot de passe incorrect");
 
   const token = jwt.sign(
-    { id: user.id, role: user.role },
-    //SECRET_KEY,
+    { id: user.id, role },
+    SECRET_KEY,
     { expiresIn: "1h" }
   );
 
-  return { token, user };
+  return { token, role };
 };
 
 // 🔹 RÉINITIALISATION DU MOT DE PASSE

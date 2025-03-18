@@ -42,12 +42,6 @@ const Patient = sequelize.define(
   {
     tableName: "patients",
     timestamps: true,
-    hooks: {
-      beforeCreate: async (patient) => {
-        const salt = await bcrypt.genSalt(10);
-        patient.password = await bcrypt.hash(patient.password, salt);
-      },
-    },
   }
 );
 

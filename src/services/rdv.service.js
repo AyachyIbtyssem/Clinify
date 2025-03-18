@@ -88,6 +88,14 @@ const confirmerRendezvous = async (id) => {
     );
   }
 };
+const getRendezVousByDate = async (date) => {
+  try {
+    const rendezVous = await rdvRepository.findRendezVousByDate(date);
+    return rendezVous;
+  } catch (error) {
+    throw new Error(`Erreur lors de la récupération des rendez-vous : ${error.message}`);
+  }
+};
 module.exports = {
   getAllRendezVous,
   getRendezVousById,
@@ -97,4 +105,5 @@ module.exports = {
   annulerRendezVous,
   modifierRendezVous,
   confirmerRendezvous,
+  getRendezVousByDate,
 };
