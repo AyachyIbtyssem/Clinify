@@ -31,7 +31,8 @@ const assistantRoutes = require("./routes/assistant.routes");
 const traitementRoutes = require("./routes/traitement.routes");
 const factureRoutes = require("./routes/facture.routes");
 const authRoutes = require("./routes/auth.routes");
-
+const analyseRoutes = require("./routes/analyse.routes");
+const path = require("path");
 
 // Définir les routes
 app.use("/api/auth", authRoutes);
@@ -44,7 +45,8 @@ app.use("/api/dossier-medical", dossierMedicalRoutes);
 app.use("/api/assistants", assistantRoutes);
 app.use("/api/traitements", traitementRoutes);
 app.use("/api/factures", factureRoutes);
-
+app.use("/api/analyse",analyseRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 
 // Synchronisation avec la base de données
 sequelize
