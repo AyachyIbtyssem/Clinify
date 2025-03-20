@@ -89,6 +89,16 @@ const prendreRendezvous = async (req, res) => {
   }
 };
 
+const findRendezVousByPatient = async (req, res) => {
+  try {
+    const patientId = req.params.id;
+    const rendezVous = await patientService.findRendezVousByPatientId(patientId);
+    res.json(rendezVous);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   getPatients,
@@ -98,4 +108,5 @@ module.exports = {
   deletePatient,
   consulterDossierMedical,
   prendreRendezvous,
+  findRendezVousByPatient ,
 };

@@ -105,6 +105,29 @@ const prendreRendezvous = async (rendezVousData) => {
   }
 };
 
+const findRendezVousByPatientId = async (idPatient) => {
+  try {
+    const rendezVous = await RendezVous.findAll({
+      where: { IdPatient: idPatient },
+      include: [
+        {
+          model: Medecin,
+          as: "Medecin",
+          attributes: ["firstName", "lastName"], // Optionnel : récupérer le médecin
+        },
+      ],
+    });
+
+    if (!rendezVous || rendezVous.length === 0) {
+      throw new Error("Aucun rendez-vous trouvé pour ce patient");
+    }
+
+    return rendezVous;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 
 
 module.exports = {
@@ -115,4 +138,5 @@ module.exports = {
   deletePatient,
   consulterDossierMedical,
   prendreRendezvous,
+  findRendezVousByPatientId,
 };
