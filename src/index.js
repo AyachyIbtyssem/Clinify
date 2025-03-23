@@ -4,14 +4,21 @@ dotenv.config();
 const express = require("express");
 const cors = require('cors');
 const sequelize = require("./config/database");
-
-
 const app = express();
+
 app.use(cors({
-  origin: '*',  // Autoriser toutes les origines
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: "*", 
+  methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+  allowedHeaders: "Content-Type,Authorization"
 }));
+
+// Ajouter un middleware pour gérer les requêtes préflight (OPTIONS)
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  res.sendStatus(200);
+});
 
 app.use(express.json());
 
