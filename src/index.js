@@ -40,6 +40,7 @@ const factureRoutes = require("./routes/facture.routes");
 const authRoutes = require("./routes/auth.routes");
 const analyseRoutes = require("./routes/analyse.routes");
 const path = require("path");
+const radioRoutes = require("./routes/radio.routes");
 
 // Définir les routes
 app.use("/api/auth", authRoutes);
@@ -54,6 +55,7 @@ app.use("/api/traitements", traitementRoutes);
 app.use("/api/factures", factureRoutes);
 app.use("/api/analyse",analyseRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
+app.use("/api/radios", radioRoutes);
 
 // Synchronisation avec la base de données
 sequelize
