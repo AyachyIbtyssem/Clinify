@@ -23,7 +23,7 @@ app.get('/api/test', (req, res) => {
 // Importation des routes
 const patientRoutes = require("./routes/patient.routes");
 const medecinRoutes = require("./routes/medecin.routes");
-const rdvRoutes = require("./routes/rdv.routes");
+const rendezVousRoutes = require("./routes/rdv.routes");
 const consultationRoutes = require("./routes/consultation.routes");
 const paiementRoutes = require("./routes/paiement.routes");
 const dossierMedicalRoutes = require("./routes/dossierMedical.routes");
@@ -38,7 +38,7 @@ const path = require("path");
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/medecins", medecinRoutes);
-app.use("/api/rendezvous", rdvRoutes);
+app.use("/api/rendezvous", rendezVousRoutes);
 app.use("/api/consultations", consultationRoutes);
 app.use("/api/paiements", paiementRoutes);
 app.use("/api/dossier-medical", dossierMedicalRoutes);
