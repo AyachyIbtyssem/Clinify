@@ -1,18 +1,24 @@
-/*const dotenv = require("dotenv");
-dotenv.config();*/
-
 const express = require("express");
 const cors = require("cors");
 const sequelize = require("./config/database");
 
 const app = express();
+
 app.use(
   cors({
     origin: "*", // Autoriser toutes les origines
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Méthodes spécifiques
+    allowedHeaders: ["Content-Type", "Authorization"], // En-têtes autorisés
   })
 );
+
+// Ajouter un middleware pour gérer les requêtes préflight (OPTIONS)
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  res.sendStatus(200);
+});
 
 app.use(express.json());
 
@@ -24,7 +30,7 @@ app.get("/api/test", (req, res) => {
 // Importation des routes
 const patientRoutes = require("./routes/patient.routes");
 const medecinRoutes = require("./routes/medecin.routes");
-const rdvRoutes = require("./routes/rdv.routes");
+const rendezVousRoutes = require("./routes/rdv.routes");
 const consultationRoutes = require("./routes/consultation.routes");
 const paiementRoutes = require("./routes/paiement.routes");
 const dossierMedicalRoutes = require("./routes/dossierMedical.routes");
@@ -32,18 +38,24 @@ const assistantRoutes = require("./routes/assistant.routes");
 const traitementRoutes = require("./routes/traitement.routes");
 const factureRoutes = require("./routes/facture.routes");
 const authRoutes = require("./routes/auth.routes");
+const analyseRoutes = require("./routes/analyse.routes");
+const path = require("path");
+const radioRoutes = require("./routes/radio.routes");
 
 // Définir les routes
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/medecins", medecinRoutes);
-app.use("/api/rendezvous", rdvRoutes);
+app.use("/api/rendezvous", rendezVousRoutes);
 app.use("/api/consultations", consultationRoutes);
 app.use("/api/paiements", paiementRoutes);
 app.use("/api/dossier-medical", dossierMedicalRoutes);
 app.use("/api/assistants", assistantRoutes);
 app.use("/api/traitements", traitementRoutes);
 app.use("/api/factures", factureRoutes);
+app.use("/api/analyse", analyseRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
+app.use("/api/radios", radioRoutes);
 
 // Synchronisation avec la base de données
 sequelize

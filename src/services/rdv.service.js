@@ -96,6 +96,18 @@ const getRendezVousByDate = async (date) => {
     throw new Error(`Erreur lors de la récupération des rendez-vous : ${error.message}`);
   }
 };
+
+const findRendezVousByStatut = async (statut) => {
+  try{
+    const rendezVous = await rdvRepository.findRendezVousByStatut(statut);
+    return rendezVous;
+  }catch(error){
+    throw new Error(`Erreur lors de la récupération des rendez-vous : ${error.message}`);
+  }
+};
+
+
+
 module.exports = {
   getAllRendezVous,
   getRendezVousById,
@@ -106,4 +118,5 @@ module.exports = {
   modifierRendezVous,
   confirmerRendezvous,
   getRendezVousByDate,
+  findRendezVousByStatut,
 };

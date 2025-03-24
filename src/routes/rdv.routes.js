@@ -12,6 +12,7 @@ router.post("/:id/annuler", rdvController.annulerRendezVous); //supprimer un rdv
 router.patch("/:id/modifier", rdvController.modifierRendezVous); //modifier date et heure d'un rdv par son id
 router.patch("/:id/confirmer", rdvController.confirmerRendezvous); //confirme un rdv par son id
 router.get('/date/:date', rdvController.getRendezVousByDate);
+router.get("/statut/:statut", rdvController.findRendezVousByStatut);
 
 
 module.exports = router;

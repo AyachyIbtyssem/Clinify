@@ -10,4 +10,6 @@ router.put("/:id", patientController.updatePatient);
 router.delete("/:id", patientController.deletePatient);
 router.get("/:id/dossier", patientController.consulterDossierMedical); // La route utilise l'ID du patient
 router.post("/:id/rendezvous", patientController.prendreRendezvous);
+router.get("/:id/rendezvous", patientController.findRendezVousByPatient);
+
 module.exports = router;

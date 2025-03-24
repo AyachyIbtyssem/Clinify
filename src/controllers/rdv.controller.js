@@ -113,6 +113,17 @@ const getRendezVousByDate = async (req, res) => {
   }
 };
 
+const findRendezVousByStatut = async (req, res) => {
+  try {
+    const { statut } = req.params;
+    const rendezVous = await rdvService.findRendezVousByStatut(statut);
+    res.status(200).json(rendezVous);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   getRendezVous,
   getRendezVousById,
@@ -123,4 +134,5 @@ module.exports = {
   modifierRendezVous,
   confirmerRendezvous,
   getRendezVousByDate,
+  findRendezVousByStatut,
 };

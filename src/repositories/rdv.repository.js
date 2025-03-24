@@ -1,5 +1,6 @@
 const RendezVous = require("../models/rdv.model");
 const Patient = require("../models/patient.model");
+const Medecin = require("../models/medecin.model");
 
 // Récupérer tous les rendez-vous
 const findAllRendezVous = () => {
@@ -115,6 +116,15 @@ const findRendezVousByDate = async (date) => {
   });
 };
 
+
+const findRendezVousByStatut = async (statut) => { 
+  return await RendezVous.findAll({
+    where: {statut: statut}
+  });
+};
+
+
+
 module.exports = {
   findAllRendezVous,
   findRendezVousById,
@@ -126,4 +136,5 @@ module.exports = {
   modifierRendezVous,
   confirmerRendezvous,
   findRendezVousByDate,
+  findRendezVousByStatut,
 };
