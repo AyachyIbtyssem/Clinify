@@ -26,8 +26,29 @@ const getPaiement = async (req, res) => {
 // Ajouter un nouveau paiement
 const createPaiement = async (req, res) => {
   try {
-    const paiementData = req.body;
-    const newPaiement = await paiementService.addPaiement(paiementData);
+    const { montant, methodePaiement, IdRDV } = req.body;
+
+    // Générer une référence unique
+    const reference = `PAYMEE_${Date.now()}`;
+
+    // Si la méthode de paiement est "Paymee", traiter la transaction
+    let transactionId = null;
+    if (methodePaiement === "Paymee") {
+      const paymeeResponse = await paiementService.effectuerPaiementPaymee(montant, reference);
+      transactionId = paymeeResponse.data.payment_token;
+    }
+
+    // Créer le paiement dans la base de données
+    const newPaiement = await paiementService.addPaiement({
+      montant,
+      methodePaiement,
+      datePaiement: new Date(),
+      statut: "en attente",
+      transactionId,
+      referencePaymee: reference,
+      IdRDV,
+    });
+
     res.status(201).json(newPaiement);
   } catch (error) {
     res.status(400).json({ message: error.message });
