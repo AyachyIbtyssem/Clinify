@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const RendezVous = require("./rdv.model");
+const RendezVous = require("../models/rdv.model");
+
 
 const Paiement = sequelize.define(
   "Paiement",
@@ -21,10 +22,12 @@ const Paiement = sequelize.define(
     datePaiement: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW, // Ajout d'une valeur par défaut
     },
     statut: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "en attente", // Ajout d'une valeur par défaut
       validate: {
         isIn: [["en attente", "validé", "échoué"]],
       },
@@ -47,6 +50,21 @@ const Paiement = sequelize.define(
       },
       allowNull: false,
     },
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
   },
   {
     tableName: "paiements",
@@ -54,7 +72,7 @@ const Paiement = sequelize.define(
   }
 );
 
-Paiement.belongsTo(RendezVous, { foreignKey: "IdRDV", as: "rendezvous" });
-RendezVous.hasMany(Paiement, { as: "Paiements", foreignKey: "IdRDV" });
+Paiement.belongsTo(RendezVous, { foreignKey: "IdRDV", as: "rendezvous", onDelete: "CASCADE" });
+RendezVous.hasMany(Paiement, { as: "Paiements", foreignKey: "IdRDV", onDelete: "CASCADE" });
 
 module.exports = Paiement;

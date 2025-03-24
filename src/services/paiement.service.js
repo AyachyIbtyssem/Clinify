@@ -1,6 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const paiementRepository = require("../repositories/paiement.repository");
+const Paiement = require("../models/paiement.model"); // Vérifie le bon chemin
 
 // Récupérer tous les paiements
 const getAllPaiements = async () => {
@@ -9,100 +10,72 @@ const getAllPaiements = async () => {
 
 // Récupérer un paiement par ID
 const getPaiementById = async (id) => {
-  const paiement = await paiementRepository.findPaiementById(id);
-  if (!paiement) {
-    throw new Error("Paiement non trouvé");
-  }
-  return paiement;
+  return await paiementRepository.findPaiementById(id);
 };
 
-
-
-// Mettre à jour un paiement
-const updatePaiement = async (id, paiementData) => {
-  const updatedPaiement = await paiementRepository.updatePaiementById(
-    id,
-    paiementData
-  );
-  if (updatedPaiement[0] === 0) {
-    // Sequelize retourne [nombre de lignes affectées]
-    throw new Error("Paiement non trouvé");
-  }
-  return updatedPaiement;
-};
-
-// Supprimer un paiement
-const deletePaiement = async (id) => {
-  const deleted = await paiementRepository.deletePaiementById(id);
-  if (!deleted) {
-    throw new Error("Paiement non trouvé");
-  }
-  return deleted;
-};
-
-// Fonction pour initier un paiement avec Paymee
-const effectuerPaiementPaymee = async (montant, idRdv, methodePaiement) => {
+// Effectuer un paiement via Paymee
+const effectuerPaiement = async (montant, idRdv, methodePaiement, userInfo) => {
   try {
-    if (methodePaiement !== "Paymee") {
-      throw new Error("Méthode de paiement non prise en charge");
-    }
-
-    const response = await axios.post(
-      "https://sandbox.paymee.tn/api/v2/payments/create",
-      {
-        vendor: process.env.PAYMEE_VENDOR, // Ton numéro de compte Paymee (ex: 3699)
-        amount: montant,
-        note: `Paiement pour le RDV ${idRdv}`,
-        order_id: `CMD_${idRdv}`,
-        return_url: "http://localhost:3000/success",
-        cancel_url: "http://localhost:3000/cancel",
+    // Appel à l'API de Paymee
+    const response = await axios.post(process.env.PAYMEE_API_URL, {
+      vendor: process.env.PAYMEE_VENDOR,
+      amount: montant,
+      order_id: `CMD_${idRdv}`,
+      return_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+      webhook_url: "http://localhost:3000/api/paiements/webhook",
+      first_name: userInfo.first_name,
+      last_name: userInfo.last_name,
+      email: userInfo.email,
+    }, {
+      headers: {
+        "Authorization": `Token ${process.env.PAYMEE_API_KEY}`,
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Token ${process.env.PAYMEE_API_KEY}`,
-        },
-      }
-    );
+    });
 
-    console.log("Réponse Paymee :", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Erreur Paymee :", error.response?.data || error.message);
-    throw new Error("Échec du paiement Paymee");
-  }
-};
-
-// Ajouter un paiement dans la base de données et l’envoyer à Paymee
-const addPaiement = async (paiementData) => {
-  try {
-    // Sauvegarder le paiement en base de données
-    const paiement = await paiementRepository.createPaiement(paiementData);
-
-    // Si c'est un paiement via Paymee, on envoie la requête à Paymee
-    if (paiementData.methodePaiement === "Paymee") {
-      const paymeeResponse = await effectuerPaiementPaymee(
-        paiement.montant,
-        paiement.IdRDV,
-        paiement.methodePaiement
-      );
-
-      // Mise à jour du statut en fonction de la réponse de Paymee
-      paiement.statut = paymeeResponse.success ? "validé" : "échoué";
-      await paiement.save();
+    if (!response.data || !response.data.success) {
+      throw new Error("Paiement refusé par Paymee");
     }
+
+    // Stocker la transaction en BDD
+    const paiement = await Paiement.create({
+      montant,
+      methodePaiement,
+      datePaiement: new Date(),
+      statut: "en attente",
+      transactionId: response.data.data.payment_id, // ID transaction Paymee
+      referencePaymee: response.data.data.token, // Référence unique Paymee
+      IdRDV: idRdv,
+    });
 
     return paiement;
   } catch (error) {
-    console.error("Erreur lors de l'ajout du paiement :", error);
-    throw new Error("Impossible d'ajouter le paiement");
+    console.error("❌ Erreur de paiement :", error.response?.data || error.message);
+    throw new Error("Échec du paiement avec Paymee.");
   }
 };
+
+
+// Ajouter un paiement
+const addPaiement = async (paiementData) => {
+  try {
+    console.log("📤 Données à insérer :", paiementData);
+
+    const paiement = await Paiement.create(paiementData);
+    
+    console.log("✅ Paiement ajouté en DB :", paiement);
+    return paiement;
+  } catch (error) {
+    console.error("❌ Erreur lors de l'ajout du paiement :", error);
+    throw new Error("Impossible d'ajouter le paiement.");
+  }
+};
+
+
 module.exports = {
   getAllPaiements,
   getPaiementById,
-  updatePaiement,
-  deletePaiement,
-  effectuerPaiementPaymee,
   addPaiement,
+  effectuerPaiement,
 };
