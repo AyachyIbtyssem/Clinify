@@ -19,14 +19,15 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Email et mot de passe requis" });
     }
 
-    const { token, role, userId } = await authService.loginUser(email, password);
+    const { token, role, userId, userName } = await authService.loginUser(email, password);
     
-    // Ajouter userId à la réponse JSON
-    res.status(200).json({ token, role, userId });  // Retourner également l'ID
+    // Ajouter userName à la réponse JSON
+    res.status(200).json({ token, role, userId, userName });  // Retourner aussi le nom de l'utilisateur
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 
 // 🔹 RÉINITIALISATION DU MOT DE PASSE

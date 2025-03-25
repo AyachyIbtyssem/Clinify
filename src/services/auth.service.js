@@ -38,6 +38,7 @@ const registerUser = async ({ firstName, lastName, email, password, phone, addre
 };
 
 // 🔹 CONNEXION
+// 🔹 CONNEXION
 const loginUser = async (email, password) => {
   let user = await Patient.findOne({ where: { email } });
   let role = "patient";
@@ -65,8 +66,11 @@ const loginUser = async (email, password) => {
     { expiresIn: "1h" }
   );
 
-  // Retourner l'ID de l'utilisateur, le rôle, et le token
-  return { token, role, userId: user.id };  // On retourne l'ID de l'utilisateur ici
+  // Récupérer le nom de l'utilisateur (en supposant qu'il existe dans la base de données)
+  const userName = user.name || `${user.firstName} ${user.lastName}`; // Remplacez cela par le champ approprié si nécessaire
+
+  // Retourner l'ID de l'utilisateur, le rôle, le token et le nom
+  return { token, role, userId: user.id, userName };  // On retourne le nom ici
 };
 
 
