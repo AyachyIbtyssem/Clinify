@@ -11,7 +11,6 @@ const register = async (req, res) => {
   }
 };
 
-// 🔹 CONNEXION
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -20,12 +19,16 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Email et mot de passe requis" });
     }
 
-    const { token, role } = await authService.loginUser(email, password);
-    res.status(200).json({ token, role });
+    const { token, role, userId, userName } = await authService.loginUser(email, password);
+    
+    // Ajouter userName à la réponse JSON
+    res.status(200).json({ token, role, userId, userName });  // Retourner aussi le nom de l'utilisateur
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
+
 
 // 🔹 RÉINITIALISATION DU MOT DE PASSE
 const resetPassword = async (req, res) => {

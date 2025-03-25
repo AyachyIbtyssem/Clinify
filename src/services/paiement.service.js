@@ -1,4 +1,7 @@
+require("dotenv").config();
+const axios = require("axios");
 const paiementRepository = require("../repositories/paiement.repository");
+const Paiement = require("../models/paiement.model"); // Vérifie le bon chemin
 
 // Récupérer tous les paiements
 const getAllPaiements = async () => {
@@ -7,44 +10,72 @@ const getAllPaiements = async () => {
 
 // Récupérer un paiement par ID
 const getPaiementById = async (id) => {
-  const paiement = await paiementRepository.findPaiementById(id);
-  if (!paiement) {
-    throw new Error("Paiement non trouvé");
-  }
-  return paiement;
+  return await paiementRepository.findPaiementById(id);
 };
 
-// Ajouter un nouveau paiement
+// Effectuer un paiement via Paymee
+const effectuerPaiement = async (montant, idRdv, methodePaiement, userInfo) => {
+  try {
+    // Appel à l'API de Paymee
+    const response = await axios.post(process.env.PAYMEE_API_URL, {
+      vendor: process.env.PAYMEE_VENDOR,
+      amount: montant,
+      order_id: `CMD_${idRdv}`,
+      return_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+      webhook_url: "http://localhost:3000/api/paiements/webhook",
+      first_name: userInfo.first_name,
+      last_name: userInfo.last_name,
+      email: userInfo.email,
+    }, {
+      headers: {
+        "Authorization": `Token ${process.env.PAYMEE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.data || !response.data.success) {
+      throw new Error("Paiement refusé par Paymee");
+    }
+
+    // Stocker la transaction en BDD
+    const paiement = await Paiement.create({
+      montant,
+      methodePaiement,
+      datePaiement: new Date(),
+      statut: "en attente",
+      transactionId: response.data.data.payment_id, // ID transaction Paymee
+      referencePaymee: response.data.data.token, // Référence unique Paymee
+      IdRDV: idRdv,
+    });
+
+    return paiement;
+  } catch (error) {
+    console.error("❌ Erreur de paiement :", error.response?.data || error.message);
+    throw new Error("Échec du paiement avec Paymee.");
+  }
+};
+
+
+// Ajouter un paiement
 const addPaiement = async (paiementData) => {
-  return await paiementRepository.createPaiement(paiementData);
+  try {
+    console.log("📤 Données à insérer :", paiementData);
+
+    const paiement = await Paiement.create(paiementData);
+    
+    console.log("✅ Paiement ajouté en DB :", paiement);
+    return paiement;
+  } catch (error) {
+    console.error("❌ Erreur lors de l'ajout du paiement :", error);
+    throw new Error("Impossible d'ajouter le paiement.");
+  }
 };
 
-// Mettre à jour un paiement
-const updatePaiement = async (id, paiementData) => {
-  const updatedPaiement = await paiementRepository.updatePaiementById(
-    id,
-    paiementData
-  );
-  if (updatedPaiement[0] === 0) {
-    // Sequelize retourne [nombre de lignes affectées]
-    throw new Error("Paiement non trouvé");
-  }
-  return updatedPaiement;
-};
-
-// Supprimer un paiement
-const deletePaiement = async (id) => {
-  const deleted = await paiementRepository.deletePaiementById(id);
-  if (!deleted) {
-    throw new Error("Paiement non trouvé");
-  }
-  return deleted;
-};
 
 module.exports = {
   getAllPaiements,
   getPaiementById,
   addPaiement,
-  updatePaiement,
-  deletePaiement,
+  effectuerPaiement,
 };

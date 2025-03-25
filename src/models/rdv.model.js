@@ -30,7 +30,7 @@ const RendezVous = sequelize.define(
       allowNull: false,
       defaultValue: "en attente", // Valeur par défaut
       validate: {
-        isIn: [["en attente", "validé", "échoué"]], // Validation des statuts
+        isIn: [["en attente", "validé", "échoué", "annulé"]], // Validation des statuts
       },
     },
     typeRendezVous: {

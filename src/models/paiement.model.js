@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-/*const Medecin = require("./medecin.model");*/
-const RendezVous = require("./rdv.model");
+const RendezVous = require("../models/rdv.model");
+
 
 const Paiement = sequelize.define(
   "Paiement",
@@ -22,22 +22,26 @@ const Paiement = sequelize.define(
     datePaiement: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW, // Ajout d'une valeur par défaut
     },
     statut: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "en attente", // Ajout d'une valeur par défaut
       validate: {
         isIn: [["en attente", "validé", "échoué"]],
       },
     },
-    /*IdMedecin: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Medecin,
-        key: "id",
-      },
-      allowNull: false,
-    },*/
+    transactionId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+    referencePaymee: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
     IdRDV: {
       type: DataTypes.INTEGER,
       references: {
@@ -46,6 +50,21 @@ const Paiement = sequelize.define(
       },
       allowNull: false,
     },
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
   },
   {
     tableName: "paiements",
@@ -53,10 +72,7 @@ const Paiement = sequelize.define(
   }
 );
 
-// Un paiement appartient à un seul médecin
-/*Paiement.belongsTo(Medecin, { foreignKey: "IdMedecin", as: "medecin" });*/
-// Un paiement appartient à un seul rendez-vous
-Paiement.belongsTo(RendezVous, { foreignKey: "IdRDV", as: "rendezvous" });
-RendezVous.hasMany(Paiement, { as: "Paiements", foreignKey: "IdRDV" });
+Paiement.belongsTo(RendezVous, { foreignKey: "IdRDV", as: "rendezvous", onDelete: "CASCADE" });
+RendezVous.hasMany(Paiement, { as: "Paiements", foreignKey: "IdRDV", onDelete: "CASCADE" });
 
 module.exports = Paiement;

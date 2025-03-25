@@ -39,16 +39,16 @@ const deleteRendezVous = async (id) => {
   return deleted;
 };
 
-const annulerRendezVous = async (idRDV) => {
+const annulerRendezVous = async (id) => {
   try {
-    const rendezVous = await rdvRepository.annulerRendezVous(idRDV);
-    return rendezVous;
+    const rendezVousAnnule = await rdvRepository.annulerRendezVous(id);
+    return rendezVousAnnule;
   } catch (error) {
-    throw new Error(
-      `Erreur lors de l'annulation du rendez-vous : ${error.message}`
-    );
+    throw new Error(`Erreur lors de l'annulation : ${error.message}`);
   }
 };
+
+
 
 ////modifier date et heure d'un rdv par son id
 const modifierRendezVous = async (id, date, heure) => {

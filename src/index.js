@@ -32,6 +32,7 @@ const patientRoutes = require("./routes/patient.routes");
 const medecinRoutes = require("./routes/medecin.routes");
 const rendezVousRoutes = require("./routes/rdv.routes");
 const consultationRoutes = require("./routes/consultation.routes");
+const bodyParser = require("body-parser");
 const paiementRoutes = require("./routes/paiement.routes");
 const dossierMedicalRoutes = require("./routes/dossierMedical.routes");
 const assistantRoutes = require("./routes/assistant.routes");
@@ -48,6 +49,8 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/medecins", medecinRoutes);
 app.use("/api/rendezvous", rendezVousRoutes);
 app.use("/api/consultations", consultationRoutes);
+app.use(bodyParser.json()); // Assure-toi que cette ligne est bien là
+app.use(bodyParser.urlencoded({ extended: true })); // Ajoute ceci pour gérer les formulaires
 app.use("/api/paiements", paiementRoutes);
 app.use("/api/dossier-medical", dossierMedicalRoutes);
 app.use("/api/assistants", assistantRoutes);
