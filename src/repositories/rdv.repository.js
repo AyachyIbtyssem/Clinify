@@ -57,17 +57,27 @@ const findAllRendezVousByMedecinId = (medecinId) => {
   });
 };
 
-const annulerRendezVous = async (idRDV) => {
-  const rendezVous = await RendezVous.findByPk(idRDV);
+const annulerRendezVous = async (id) => {
+  try {
+    const rdv = await RendezVous.findByPk(id);
+    if (!rdv) {
+      throw new Error(`Aucun rendez-vous trouvé avec l'ID ${id}`);
+    }
 
-  if (!rendezVous) {
-    throw new Error("Rendez-vous non trouvé.");
+    if (rdv.statut === "annulé") {
+      throw new Error("Le rendez-vous est déjà annulé.");
+    }
+
+    rdv.statut = "annulé"; // Modification du statut
+    await rdv.save();
+
+    return rdv;
+  } catch (error) {
+    throw new Error(`Erreur lors de l'annulation du rendez-vous : ${error.message}`);
   }
-  rendezVous.statut = "Annulé";
-  await rendezVous.save();
-
-  return rendezVous;
 };
+
+
 
 ////modifier date et heure d'un rdv par son id
 const modifierRendezVous = async (id, date, heure) => {

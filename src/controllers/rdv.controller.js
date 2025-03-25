@@ -55,18 +55,20 @@ const deleteRendezVous = async (req, res) => {
 
 const annulerRendezVous = async (req, res) => {
   try {
-    const { id } = req.params; // ID du rendez-vous
+    const { id } = req.params;
+    console.log(`ID du rendez-vous à annuler : ${id}`);
 
-    const rendezVous = await rdvService.annulerRendezVous(id);
-
+    const rendezVousAnnule = await rdvService.annulerRendezVous(id);
     res.status(200).json({
       message: "Rendez-vous annulé avec succès",
-      rendezVous: rendezVous,
+      rendezVous: rendezVousAnnule,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
+
 
 //modifier date et heure d'un rdv par son id
 const modifierRendezVous = async (req, res) => {
