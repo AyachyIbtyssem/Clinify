@@ -1,4 +1,4 @@
-const dossierMedicalService = require('../services/dossierMedical.service');
+const dossierMedicalService = require("../services/dossierMedical.service");
 
 // Récupérer tous les dossiers médicaux
 const getDossiersMedical = async (req, res) => {
@@ -13,7 +13,9 @@ const getDossiersMedical = async (req, res) => {
 // Récupérer un dossier médical par ID
 const getDossierMedical = async (req, res) => {
   try {
-    const dossier = await dossierMedicalService.getDossierMedicalById(req.params.id);
+    const dossier = await dossierMedicalService.getDossierMedicalById(
+      req.params.id
+    );
     res.json(dossier);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -33,20 +35,25 @@ const createDossierMedical = async (req, res) => {
 // Mettre à jour un dossier médical
 const updateDossierMedical = async (req, res) => {
   try {
-    const updatedDossier = await dossierMedicalService.updateDossierMedical(req.params.id, req.body);
+    const updatedDossier = await dossierMedicalService.updateDossierMedical(
+      req.params.id,
+      req.body
+    );
 
     if (!updatedDossier) {
       // Si aucun dossier n'a été trouvé ou mis à jour
       return res.status(404).json({ message: "Dossier médical introuvable" });
     }
 
-    res.json({ message: "Dossier médical mis à jour avec succès", dossier: updatedDossier });
+    res.json({
+      message: "Dossier médical mis à jour avec succès",
+      dossier: updatedDossier,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message || 'Erreur serveur' });
+    res.status(500).json({ message: error.message || "Erreur serveur" });
   }
 };
-
 
 // Supprimer un dossier médical
 const deleteDossierMedical = async (req, res) => {
@@ -61,45 +68,59 @@ const deleteDossierMedical = async (req, res) => {
 // ✅ Ajouter une analyse
 const ajouterAnalyse = async (req, res) => {
   try {
-      const { id } = req.params; // ID du patient
-      const { analyse } = req.body; // Nouvelle analyse à ajouter
+    const { id } = req.params; // ID du patient
+    const { analyse } = req.body; // Nouvelle analyse à ajouter
 
-      if (!analyse) {
-          return res.status(400).json({ message: "L'analyse est requise." });
-      }
+    if (!analyse) {
+      return res.status(400).json({ message: "L'analyse est requise." });
+    }
 
-      const dossierMisAJour = await dossierMedicalService.ajouterAnalyse(id, analyse);
+    const dossierMisAJour = await dossierMedicalService.ajouterAnalyse(
+      id,
+      analyse
+    );
 
-      res.json({
-          message: "Analyse ajoutée avec succès",
-          dossierMedical: dossierMisAJour,
-      });
+    res.json({
+      message: "Analyse ajoutée avec succès",
+      dossierMedical: dossierMisAJour,
+    });
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
-
-
 
 // ✅ Vérifier si un patient a un dossier médical
 const verifierDossierPatient = async (req, res) => {
   try {
-      console.log("🔍 Params reçus :", req.params); // Debug
+    console.log("🔍 Params reçus :", req.params); // Debug
 
-      const { id } = req.params;
-      if (!id) {
-          return res.status(400).json({ message: "L'ID du patient est requis." });
-      }
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "L'ID du patient est requis." });
+    }
 
-      const existe = await dossierMedicalService.verifierDossierPatient(id);
-      res.json({ existe });
+    const existe = await dossierMedicalService.verifierDossierPatient(id);
+    res.json({ existe });
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+const getDossiersMedicalByPatientId = async (req, res) => {
+  try {
+    const dossiers = await dossierMedicalService.getDossiersMedicalByPatientId(
+      req.params.patientId
+    );
 
-
-
+    res.json({
+      count: dossiers.length,
+      dossiers,
+    });
+  } catch (error) {
+    res
+      .status(error.message.includes("Aucun") ? 404 : 500)
+      .json({ message: error.message });
+  }
+};
 
 module.exports = {
   getDossiersMedical,
@@ -109,4 +130,5 @@ module.exports = {
   deleteDossierMedical,
   ajouterAnalyse,
   verifierDossierPatient,
+  getDossiersMedicalByPatientId,
 };

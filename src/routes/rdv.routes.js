@@ -11,8 +11,8 @@ router.delete("/:id", rdvController.deleteRendezVous); // Supprimer un rendez-vo
 router.patch("/:id/annuler", rdvController.annulerRendezVous);
 router.patch("/:id/modifier", rdvController.modifierRendezVous); //modifier date et heure d'un rdv par son id
 router.patch("/:id/confirmer", rdvController.confirmerRendezvous); //confirme un rdv par son id
-router.get('/date/:date', rdvController.getRendezVousByDate);
+router.get("/date/:date", rdvController.getRendezVousByDate);
 router.get("/statut/:statut", rdvController.findRendezVousByStatut);
-
+router.get("/patient/:patientId", rdvController.getRendezVousByPatientId);
 
 module.exports = router;

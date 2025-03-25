@@ -27,13 +27,22 @@ const deleteDossierMedicalById = (id) => {
   return DossierMedical.destroy({ where: { id } });
 };
 // Récupérer le dossier médical d'un patient par son ID
-const findDossierMedicalByPatientId = (patientId) => {
-  return DossierMedical.findOne({
-    where: { patientId: patientId }, // Filtrer par ID du patient
+const findDossiersMedicalByPatientId = (patientId) => {
+  return DossierMedical.findAll({
+    where: { patientId },
     include: [
-      { model: Patient, as: "Patient", attributes: ["firstName", "lastName"] }, // Inclure les informations du patient
-      { model: Medecin, as: "Medecin", attributes: ["firstName", "lastName"] }, // Inclure les informations du médecin
+      {
+        model: Patient,
+        as: "Patient",
+        attributes: ["firstName", "lastName"],
+      },
+      {
+        model: Medecin,
+        as: "Medecin",
+        attributes: ["firstName", "lastName", "specialty"],
+      },
     ],
+    order: [["createdAt", "DESC"]], // Optionnel: tri par date
   });
 };
 
@@ -43,5 +52,5 @@ module.exports = {
   createDossierMedical,
   updateDossierMedicalById,
   deleteDossierMedicalById,
-  findDossierMedicalByPatientId,
+  findDossiersMedicalByPatientId,
 };
