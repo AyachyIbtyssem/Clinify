@@ -106,9 +106,6 @@ const confirmerRendezvous = async (id) => {
       `Erreur lors de la confirmation du rendez-vous : ${error.message}`
     );
   }
-
-  
-  
 };
 const findRendezVousByDate = async (date) => {
   return await RendezVous.findAll({
@@ -116,15 +113,28 @@ const findRendezVousByDate = async (date) => {
   });
 };
 
-
-const findRendezVousByStatut = async (statut) => { 
+const findRendezVousByStatut = async (statut) => {
   return await RendezVous.findAll({
-    where: {statut: statut}
+    where: { statut: statut },
   });
 };
 
-
-
+const findRendezVousByPatientId = (patientId) => {
+  return RendezVous.findAll({
+    where: { IdPatient: patientId },
+    include: [
+      {
+        model: Medecin,
+        as: "Medecin",
+        attributes: ["id", "firstName", "lastName", "specialty"], // Inclure les infos du médecin
+      },
+    ],
+    order: [
+      ["date", "ASC"], // Trier par date (plus ancien au plus récent)
+      ["heure", "ASC"], // Trier par heure
+    ],
+  });
+};
 module.exports = {
   findAllRendezVous,
   findRendezVousById,
@@ -137,4 +147,5 @@ module.exports = {
   confirmerRendezvous,
   findRendezVousByDate,
   findRendezVousByStatut,
+  findRendezVousByPatientId,
 };

@@ -122,7 +122,16 @@ const findRendezVousByStatut = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+// Récupérer les rendez-vous d'un patient par son ID
+const getRendezVousByPatientId = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const rendezVous = await rdvService.getRendezVousByPatientId(patientId);
+    res.status(200).json(rendezVous);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 module.exports = {
   getRendezVous,
@@ -135,4 +144,5 @@ module.exports = {
   confirmerRendezvous,
   getRendezVousByDate,
   findRendezVousByStatut,
+  getRendezVousByPatientId,
 };

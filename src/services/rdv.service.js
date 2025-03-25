@@ -93,20 +93,37 @@ const getRendezVousByDate = async (date) => {
     const rendezVous = await rdvRepository.findRendezVousByDate(date);
     return rendezVous;
   } catch (error) {
-    throw new Error(`Erreur lors de la récupération des rendez-vous : ${error.message}`);
+    throw new Error(
+      `Erreur lors de la récupération des rendez-vous : ${error.message}`
+    );
   }
 };
 
 const findRendezVousByStatut = async (statut) => {
-  try{
+  try {
     const rendezVous = await rdvRepository.findRendezVousByStatut(statut);
     return rendezVous;
-  }catch(error){
-    throw new Error(`Erreur lors de la récupération des rendez-vous : ${error.message}`);
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération des rendez-vous : ${error.message}`
+    );
   }
 };
 
-
+// Récupérer les rendez-vous par ID patient
+const getRendezVousByPatientId = async (patientId) => {
+  try {
+    const rendezVous = await rdvRepository.findRendezVousByPatientId(patientId);
+    if (!rendezVous || rendezVous.length === 0) {
+      throw new Error("Aucun rendez-vous trouvé pour ce patient");
+    }
+    return rendezVous;
+  } catch (error) {
+    throw new Error(
+      `Erreur lors de la récupération des RDV : ${error.message}`
+    );
+  }
+};
 
 module.exports = {
   getAllRendezVous,
@@ -119,4 +136,5 @@ module.exports = {
   confirmerRendezvous,
   getRendezVousByDate,
   findRendezVousByStatut,
+  getRendezVousByPatientId,
 };
