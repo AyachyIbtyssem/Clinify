@@ -65,8 +65,10 @@ const loginUser = async (email, password) => {
     { expiresIn: "1h" }
   );
 
-  return { token, role };
+  // Retourner l'ID de l'utilisateur, le rôle, et le token
+  return { token, role, userId: user.id };  // On retourne l'ID de l'utilisateur ici
 };
+
 
 // 🔹 RÉINITIALISATION DU MOT DE PASSE
 const resetPassword = async (email, newPassword) => {
