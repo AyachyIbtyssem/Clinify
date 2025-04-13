@@ -15,7 +15,10 @@ app.use(
 // Ajouter un middleware pour gérer les requêtes préflight (OPTIONS)
 app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+  );
   res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
   res.sendStatus(200);
 });
@@ -40,6 +43,7 @@ const traitementRoutes = require("./routes/traitement.routes");
 const factureRoutes = require("./routes/facture.routes");
 const authRoutes = require("./routes/auth.routes");
 const analyseRoutes = require("./routes/analyse.routes");
+const medicamentRoutes = require("./routes/medicament.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
 
@@ -57,6 +61,7 @@ app.use("/api/assistants", assistantRoutes);
 app.use("/api/traitements", traitementRoutes);
 app.use("/api/factures", factureRoutes);
 app.use("/api/analyse", analyseRoutes);
+app.use("/api/medicaments", medicamentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/radios", radioRoutes);
 

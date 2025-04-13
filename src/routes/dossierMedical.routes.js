@@ -17,5 +17,9 @@ router.get(
   "/patient/:patientId",
   dossierMedicalController.getDossiersMedicalByPatientId
 ); //obtenir les dossiers medical par patient
-
+router.put("/:id/medicaments", dossierMedicalController.ajouterMedicament);
+router.delete(
+  "/:id/medicaments/:medicamentId",
+  dossierMedicalController.supprimerMedicament
+);
 module.exports = router;

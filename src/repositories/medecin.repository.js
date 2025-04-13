@@ -1,4 +1,4 @@
-const Medecin = require('../models/medecin.model');
+const Medecin = require("../models/medecin.model");
 
 // Récupérer tous les médecins
 const findAllMedecins = () => {

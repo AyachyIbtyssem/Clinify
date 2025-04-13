@@ -121,7 +121,43 @@ const getDossiersMedicalByPatientId = async (req, res) => {
       .json({ message: error.message });
   }
 };
+// Ajouter un médicament
+const ajouterMedicament = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medicamentData = req.body;
 
+    const dossierMisAJour = await dossierMedicalService.ajouterMedicament(
+      id,
+      medicamentData
+    );
+
+    res.json({
+      message: "Médicament ajouté avec succès",
+      dossierMedical: dossierMisAJour,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const supprimerMedicament = async (req, res) => {
+  try {
+    const { id, medicamentId } = req.params;
+
+    const dossierMisAJour = await dossierMedicalService.supprimerMedicament(
+      id,
+      parseInt(medicamentId)
+    );
+
+    res.json({
+      message: "Médicament supprimé avec succès",
+      dossierMedical: dossierMisAJour,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   getDossiersMedical,
   getDossierMedical,
@@ -131,4 +167,6 @@ module.exports = {
   ajouterAnalyse,
   verifierDossierPatient,
   getDossiersMedicalByPatientId,
+  ajouterMedicament,
+  supprimerMedicament,
 };

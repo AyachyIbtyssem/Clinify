@@ -16,6 +16,12 @@ const DossierMedical = sequelize.define(
       allowNull: false,
       defaultValue: [], // Initialise avec un tableau vide
     },
+    medicaments: {
+      // Nouveau champ
+      type: DataTypes.JSON,
+      allowNull: false,
+      defaultValue: [],
+    },
     statut: {
       type: DataTypes.STRING,
       allowNull: false,

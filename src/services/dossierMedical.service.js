@@ -94,6 +94,51 @@ const getDossiersMedicalByPatientId = async (patientId) => {
 
   return dossiers;
 };
+// Ajouter un médicament
+const ajouterMedicament = async (dossierId, medicamentData) => {
+  const dossier = await dossierMedicalRepository.findDossierMedicalById(
+    dossierId
+  );
+
+  if (!dossier) {
+    throw new Error("Dossier médical non trouvé");
+  }
+
+  const medicaments = Array.isArray(dossier.medicaments)
+    ? dossier.medicaments
+    : [];
+
+  medicaments.push({
+    id: medicaments.length + 1, // ID auto-généré
+    ...medicamentData,
+    dateAjout: new Date(), // Optionnel
+  });
+
+  dossier.medicaments = medicaments;
+  await dossier.save();
+
+  return dossier;
+};
+
+//supprimer un medicament
+const supprimerMedicament = async (dossierId, medicamentId) => {
+  const dossier = await dossierMedicalRepository.findDossierMedicalById(
+    dossierId
+  );
+
+  if (!dossier) {
+    throw new Error("Dossier médical non trouvé");
+  }
+
+  const medicaments = Array.isArray(dossier.medicaments)
+    ? dossier.medicaments.filter((m) => m.id !== medicamentId)
+    : [];
+
+  dossier.medicaments = medicaments;
+  await dossier.save();
+
+  return dossier;
+};
 module.exports = {
   getAllDossiersMedical,
   getDossierMedicalById,
@@ -103,4 +148,6 @@ module.exports = {
   ajouterAnalyse,
   verifierDossierPatient,
   getDossiersMedicalByPatientId,
+  ajouterMedicament,
+  supprimerMedicament,
 };

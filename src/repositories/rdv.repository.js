@@ -73,11 +73,11 @@ const annulerRendezVous = async (id) => {
 
     return rdv;
   } catch (error) {
-    throw new Error(`Erreur lors de l'annulation du rendez-vous : ${error.message}`);
+    throw new Error(
+      `Erreur lors de l'annulation du rendez-vous : ${error.message}`
+    );
   }
 };
-
-
 
 ////modifier date et heure d'un rdv par son id
 const modifierRendezVous = async (id, date, heure) => {
@@ -136,7 +136,14 @@ const findRendezVousByPatientId = (patientId) => {
       {
         model: Medecin,
         as: "Medecin",
-        attributes: ["id", "firstName", "lastName", "specialty"], // Inclure les infos du médecin
+        attributes: [
+          "id",
+          "firstName",
+          "lastName",
+          "specialty",
+          "numSalle",
+          "nomDept",
+        ], // Inclure les infos du médecin
       },
     ],
     order: [
