@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require("express");//backend
 const cors = require("cors");
-const sequelize = require("./config/database");
+const sequelize = require("./config/database");//backend
 
 const app = express();
 
@@ -42,7 +42,7 @@ const authRoutes = require("./routes/auth.routes");
 const analyseRoutes = require("./routes/analyse.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
-
+const notificationRoutes = require('./routes/notification.routes');
 // Définir les routes
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
@@ -59,7 +59,7 @@ app.use("/api/factures", factureRoutes);
 app.use("/api/analyse", analyseRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/radios", radioRoutes);
-
+app.use("/api/notifications", notificationRoutes);
 // Synchronisation avec la base de données
 sequelize
   .sync({ alter: true }) // Permet de modifier la structure de la DB sans perdre de données
