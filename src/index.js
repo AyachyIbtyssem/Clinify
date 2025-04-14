@@ -46,6 +46,8 @@ const analyseRoutes = require("./routes/analyse.routes");
 const medicamentRoutes = require("./routes/medicament.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
+const healthProfileRoutes = require("./routes/patientHealthProfile.routes");
+const aiRoutes = require("./routes/ai.routes");
 
 // Définir les routes
 app.use("/api/auth", authRoutes);
@@ -64,6 +66,8 @@ app.use("/api/analyse", analyseRoutes);
 app.use("/api/medicaments", medicamentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/radios", radioRoutes);
+app.use("/api/health-profiles", healthProfileRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Synchronisation avec la base de données
 sequelize
