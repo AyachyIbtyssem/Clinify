@@ -70,13 +70,10 @@ app.use("/api/analyse", analyseRoutes);
 app.use("/api/medicaments", medicamentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/radios", radioRoutes);
-<<<<<<< HEAD
 app.use("/api/notifications", notificationRoutes);
-=======
 app.use("/api/health-profiles", healthProfileRoutes);
 app.use("/api/ai", aiRoutes);
 
->>>>>>> chaima
 // Synchronisation avec la base de données
 sequelize
   .sync({ alter: true }) // Permet de modifier la structure de la DB sans perdre de données
