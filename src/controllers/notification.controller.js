@@ -46,7 +46,6 @@ const deleteNotification = async (req, res) => {
 };
 
 const getNotificationsByPatientId = async (req, res) => {
-    console.log("called getNotificationsByPatientId with", req.params.patientId); // debug
     try {
       const result = await notifService.getNotificationsByPatientId(req.params.patientId);
       res.json(result);
