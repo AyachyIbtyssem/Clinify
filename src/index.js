@@ -46,13 +46,10 @@ const analyseRoutes = require("./routes/analyse.routes");
 const medicamentRoutes = require("./routes/medicament.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
-<<<<<<< HEAD
 const notificationRoutes = require('./routes/notification.routes');
-=======
 const healthProfileRoutes = require("./routes/patientHealthProfile.routes");
 const aiRoutes = require("./routes/ai.routes");
 
->>>>>>> chaima
 // Définir les routes
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
