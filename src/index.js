@@ -1,6 +1,6 @@
-const express = require("express");//backend
+const express = require("express"); //backend
 const cors = require("cors");
-const sequelize = require("./config/database");//backend
+const sequelize = require("./config/database"); //backend
 
 const app = express();
 
@@ -46,13 +46,11 @@ const analyseRoutes = require("./routes/analyse.routes");
 const medicamentRoutes = require("./routes/medicament.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
-<<<<<<< HEAD
-const notificationRoutes = require('./routes/notification.routes');
-=======
+const notificationRoutes = require("./routes/notification.routes");
 const healthProfileRoutes = require("./routes/patientHealthProfile.routes");
 const aiRoutes = require("./routes/ai.routes");
+const medicamentReminderRoutes = require("./routes/medicamentReminder.route");
 
->>>>>>> chaima
 // Définir les routes
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
@@ -70,13 +68,11 @@ app.use("/api/analyse", analyseRoutes);
 app.use("/api/medicaments", medicamentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));
 app.use("/api/radios", radioRoutes);
-<<<<<<< HEAD
 app.use("/api/notifications", notificationRoutes);
-=======
 app.use("/api/health-profiles", healthProfileRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/medicaments", medicamentReminderRoutes);
 
->>>>>>> chaima
 // Synchronisation avec la base de données
 sequelize
   .sync({ alter: true }) // Permet de modifier la structure de la DB sans perdre de données
@@ -86,5 +82,8 @@ sequelize
     app.listen(PORT, () =>
       console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
     );
+    // 👉 Lancement du scheduler APRES le serveur
+    require("./schedulers/scheduler");
   })
   .catch((err) => console.error("Erreur de synchronisation de la base :", err));
+require("./schedulers/scheduler");

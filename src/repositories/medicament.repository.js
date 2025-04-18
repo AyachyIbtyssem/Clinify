@@ -30,13 +30,6 @@ const deleteMedicamentById = (id) => {
 const findMedicamentsByDossierId = (dossierId) => {
   return Medicament.findAll({
     where: { dossierMedicalId: dossierId },
-    include: [
-      {
-        model: DossierMedical,
-        as: "DossierMedical",
-        attributes: ["id", "statut"],
-      },
-    ],
     order: [["createdAt", "DESC"]],
   });
 };
