@@ -93,6 +93,46 @@ const ajouterMedicamentAuDossier = async (req, res) => {
   }
 };
 
+const checkMedicationStatus = async (req, res) => {
+  try {
+    const canTake = await medicamentService.canTakeMedication(req.params.id);
+    res.json(canTake); // Retourne uniquement true/false
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+// Confirmer la prise d'un médicament
+const confirmerPrise = async (req, res) => {
+  try {
+    const updated = await medicamentService.marquerCommePris(req.params.id);
+    res.json({ success: true, medicament: updated });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Annuler la prise d'un médicament
+const annulerPrise = async (req, res) => {
+  try {
+    const updated = await medicamentService.marquerCommeNonPris(req.params.id);
+    res.json({ success: true, medicament: updated });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getActiveMedicamentsByDossierId = async (req, res) => {
+  try {
+    const medicaments = await medicamentService.getActiveMedicamentsByDossierId(
+      req.params.dossierId
+    );
+    res.json(medicaments);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getMedicaments,
   getMedicament,
@@ -101,4 +141,8 @@ module.exports = {
   deleteMedicament,
   getMedicamentsByDossierId,
   ajouterMedicamentAuDossier,
+  checkMedicationStatus,
+  confirmerPrise,
+  annulerPrise,
+  getActiveMedicamentsByDossierId,
 };

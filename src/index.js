@@ -83,7 +83,7 @@ sequelize
       console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
     );
     // 👉 Lancement du scheduler APRES le serveur
-    require("./schedulers/scheduler");
-  })
-  .catch((err) => console.error("Erreur de synchronisation de la base :", err));
-require("./schedulers/scheduler");
+    //require("./schedulers/scheduler");
+  });
+//.catch((err) => console.error("Erreur de synchronisation de la base :", err));
+//require("./schedulers/scheduler");

@@ -43,6 +43,16 @@ const Medicament = sequelize.define(
         key: "id",
       },
     },
+
+    priseEffectuee: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    dernierePrise: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: "medicaments",
