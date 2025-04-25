@@ -15,7 +15,7 @@ const Medicament = sequelize.define(
       allowNull: false,
     },
     duree: {
-      type: DataTypes.STRING, // Ex: "7 jours", "2 semaines"
+      type: DataTypes.STRING, // Ex: "7 jours", "2 semaines" , "toujours"
       allowNull: false,
     },
     frequence: {
@@ -30,12 +30,28 @@ const Medicament = sequelize.define(
       type: DataTypes.TEXT, // Instructions supplémentaires
       allowNull: true,
     },
+    // Champ ajouté pour la gestion du prochain rappel
+    nextReminder: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: new Date(), // initialisé à la date de création
+    },
     dossierMedicalId: {
       type: DataTypes.INTEGER,
       references: {
         model: DossierMedical,
         key: "id",
       },
+    },
+
+    priseEffectuee: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    dernierePrise: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

@@ -8,7 +8,7 @@ class HuggingFaceService {
       throw new Error("Clé API HuggingFace manquante");
     }
     this.hf = new HfInference(process.env.HF_API_KEY);
-    this.model = "mistralai/Mistral-7B-Instruct-v0.1";
+    this.model = "microsoft/phi-3-mini-4k-instruct";
   }
 
   async generateHealthRecommendations(patient, healthProfile, analyses) {
@@ -54,7 +54,7 @@ Répondez uniquement la partie à partir de la ligne suivante:
         model: this.model,
         inputs: prompt,
         parameters: {
-          max_new_tokens: 600,
+          max_new_tokens: 500,
           temperature: 0.8,
           top_k: 50,
           top_p: 0.95,

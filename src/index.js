@@ -1,6 +1,6 @@
-const express = require("express");//backend
+const express = require("express"); //backend
 const cors = require("cors");
-const sequelize = require("./config/database");//backend
+const sequelize = require("./config/database"); //backend
 
 const app = express();
 
@@ -46,9 +46,10 @@ const analyseRoutes = require("./routes/analyse.routes");
 const medicamentRoutes = require("./routes/medicament.routes");
 const path = require("path");
 const radioRoutes = require("./routes/radio.routes");
-const notificationRoutes = require('./routes/notification.routes');
+const notificationRoutes = require("./routes/notification.routes");
 const healthProfileRoutes = require("./routes/patientHealthProfile.routes");
 const aiRoutes = require("./routes/ai.routes");
+const medicamentReminderRoutes = require("./routes/medicamentReminder.route");
 
 // Définir les routes
 app.use("/api/auth", authRoutes);
@@ -70,6 +71,7 @@ app.use("/api/radios", radioRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/health-profiles", healthProfileRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/medicaments", medicamentReminderRoutes);
 
 // Synchronisation avec la base de données
 sequelize
@@ -80,5 +82,8 @@ sequelize
     app.listen(PORT, () =>
       console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`)
     );
-  })
-  .catch((err) => console.error("Erreur de synchronisation de la base :", err));
+    // 👉 Lancement du scheduler APRES le serveur
+    //require("./schedulers/scheduler");
+  });
+//.catch((err) => console.error("Erreur de synchronisation de la base :", err));
+//require("./schedulers/scheduler");

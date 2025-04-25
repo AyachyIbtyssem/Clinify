@@ -18,5 +18,15 @@ router.post(
   "/dossier/:dossierId",
   medicamentController.ajouterMedicamentAuDossier
 );
+//cest id de medicamanet
+router.get("/:id/status", medicamentController.checkMedicationStatus);
+
+router.patch("/:id/confirmer", medicamentController.confirmerPrise);
+router.patch("/:id/annuler", medicamentController.annulerPrise);
+
+router.get(
+  "/dossier/:dossierId/actifs",
+  medicamentController.getActiveMedicamentsByDossierId
+);
 
 module.exports = router;
