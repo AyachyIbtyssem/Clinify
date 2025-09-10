@@ -1,4 +1,4 @@
-# Clinify Backend 🛠️
+# Clinify Backend (Academic Project)
 
 ## Project Overview
 **Clinify** is a web and mobile platform designed to digitize and streamline clinic services.  
